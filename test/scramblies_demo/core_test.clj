@@ -33,3 +33,16 @@
 (deftest test08
   (testing "char inside multiple char"
     (is (scramble? "ffffffffff" "f"))))
+
+(deftest test09
+  (testing "example test01"
+    (is (scramble? "rekqodlw" "world"))))
+
+(deftest test10
+  (testing "example test02"
+    (is (scramble? "cedewaraaossoqqyt" "codewars"))))
+
+(deftest test11
+  (testing "example test03"
+    (is (not (scramble? "katas" "steak")))))
+
