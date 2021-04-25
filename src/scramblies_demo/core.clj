@@ -26,6 +26,9 @@
     (every? (fn [k] (>= (get fs1 k 0) (get fs2 k)))
             (keys fs2))))
 
+(defn atoz? [str]
+  (every? #(Character/isLowerCase %) str))
+
 ; Simple Body Page
 (defn simple-body-page [req]
   {:status  200
@@ -34,10 +37,18 @@
 
 ; Request Example
 (defn request-scramble [req]
-  {:status  200
-   :headers {"Content-Type" "text/json"}
-   :body    (-> (let [p (partial getparam req)]
-                  (str (json/write-str (scramble? (p :str1) (p :str2))))))})
+  (let [p (partial getparam req)
+        str1 (p :str1)
+        str2 (p :str2)
+        ok1 (atoz? str1)
+        ok2 (atoz? str2)]
+    (if (and ok1 ok2)
+      {:status  200
+       :headers {"Content-Type" "text/json"}
+       :body    (str (json/write-str (scramble? str1 str2)))}
+      {:status  400
+       :headers {"Content-Type" "text/json"}
+       :body    (str (json/write-str "invalid input"))})))
 
 (defroutes app-routes
   (GET "/" [] simple-body-page)
